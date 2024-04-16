@@ -150,3 +150,4 @@ select * from emp order by job desc, hiredate desc;
 -- 두개 이상의 정렬 지군이 필요하다면 위와 같이 컴마(,) 로 구분해서 두가지 기준을 지정해주며,
 -- 위의 예제로 봤을 때 job으로 1차 내림 차순 정렬하고,같은 job 값들 사이에 hiredate로 내림차순 정렬한다.
 
+select * from booklist;
