@@ -75,7 +75,99 @@ public class BookDao {
 		
 		return list;
 	}
-	
-	
 
+	public int insertBook(BookDto bdto) {
+		int result = 0;
+		con =getConnection();
+		String sql = "insert into booklist (booknum, subject, makeyear, inprice, rentprice , grade) "
+				+ " values(book_seq.nextVal, ?, ?, ?, ?, ?)";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, bdto.getSubject());
+			pstmt.setInt(2, bdto.getMakeyaer());
+			pstmt.setInt(3, bdto.getInprice());
+			pstmt.setInt(4, bdto.getInprice());
+			pstmt.setString(5, bdto.getGrade());
+
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) { e.printStackTrace();
+		}finally{ close(); }
+		
+		return result;
+	}
+
+	public BookDto getBook(int booknum) {
+		BookDto bdto = null;
+		con = getConnection();
+		String sql = "Select * from booklist where booknum =?";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, booknum);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()){
+				bdto  = new BookDto();
+				bdto.setBooknum(rs.getInt("booknum"));
+				bdto.setSubject(rs.getString("subject"));
+				bdto.setMakeyaer(rs.getInt("makeyear"));
+				bdto.setInprice(rs.getInt("inprice"));
+				bdto.setRentprice(rs.getInt("rentprice"));
+				bdto.setGrade(rs.getString("grade"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			close();
+		}
+		
+		return bdto;
+	}
+
+	public int updateBook(BookDto bdto) {
+		int result =0;
+		
+		con = getConnection();
+		String sql = "update booklist set subject = ? , makeyear = ? , inprice = ?, rentprice = ? , grade =? where booknum = ?";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			
+			pstmt.setString(1, bdto.getSubject());
+			pstmt.setInt(2, bdto.getMakeyaer());
+			pstmt.setInt(3, bdto.getInprice());
+			pstmt.setInt(4, bdto.getRentprice());
+			pstmt.setString(5, bdto.getGrade());
+			pstmt.setInt(6, bdto.getBooknum());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) { e.printStackTrace();  }
+		close();
+		
+		return result;
+	}
+
+	public int  deleteBook(int booknum) {
+		int result = 0;
+		con = getConnection();
+		
+		String sql = "delete from booklist where booknum = ?";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt( 1, booknum );
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	
+		close();
+		
+		
+		return result;
+		
+	}
 }
