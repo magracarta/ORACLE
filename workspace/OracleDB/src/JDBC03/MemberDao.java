@@ -129,14 +129,15 @@ public class MemberDao {
 		return result;
 	}
 
-	public int deletMember(int num) {
+	public int deletMember(int membernum) {
 		int result =0;
 		
 		con = dbm.getConnection();
 		String sql = "delete memberlist where membernum = ? ";
 		try {
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, num);
+			pstmt.setInt(1, membernum);
+			//결과가 테이블 형태로 받는건 -> executeQuery 
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) { e.printStackTrace();
 		}

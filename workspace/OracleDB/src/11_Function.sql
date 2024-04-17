@@ -85,6 +85,9 @@ SELECT TO_CHAR(SYSDATE,'DDD') FROM DUAL; --> 107
 SELECT TO_CHAR(SYSDATE,'DL') FROM DUAL; --> 2024 4월 16일 금요일
 
 
+select to_number(to_char(sysdate, 'ddd')) - to_number(to_char(to_date('2024-01-13'), 'ddd')) from dual; --> 04
+
+
 
 --round() : 반올림 (음수 : 소수점 이상 자리)
 select round(12.3456,3) from dual;

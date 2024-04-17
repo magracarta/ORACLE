@@ -9,13 +9,13 @@ public class Member_Update {
 
 	public static void main(String[] args) throws ParseException {
 		MemberDao mdao = new MemberDao();
-		MemberDto mdto = new MemberDto();
+		MemberDto mdto =null;
 		Scanner sc = new Scanner(System.in);
 		
 		System.out.printf("수정할 회원 번호를 입력해주세요 ->");
 		int num = Integer.parseInt(sc.nextLine());
-		
-		if(mdao.getMember(num) == null){
+		mdto = mdao.getMember(num);
+		if(mdto == null){
 			System.out.println("회원조회가 안됩니다.");
 			return;
 		}
@@ -32,13 +32,13 @@ public class Member_Update {
 		String birthInput = sc.nextLine();
 		
 		if(!birthInput.equals("") ){
-			java.util.Date d = sdt.parse(birthInput);
-			java.sql.Date birth = new java.sql.Date( d.getTime());
-			mdto.setBirth(birth);
+			java.util.Date d = sdt.parse(birthInput); //java.util.Date 로 변환
+			java.sql.Date birth = new java.sql.Date( d.getTime());  //java.sql.Date 로 변환
+			mdto.setBirth(birth); //mdto 에 저장
 			
-			Calendar today = Calendar.getInstance();
-			Calendar c = Calendar.getInstance();
-			c.setTime(d);
+			Calendar today = Calendar.getInstance(); // 나이계산
+			Calendar c = Calendar.getInstance(); //오늘날짜
+			c.setTime(d); //입력한 날짜
 			
 			//나이
 			int age = today.get(Calendar.YEAR) - c.get(Calendar.YEAR);
