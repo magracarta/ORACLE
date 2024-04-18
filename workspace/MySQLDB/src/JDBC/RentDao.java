@@ -115,6 +115,76 @@ public class RentDao {
 		
 		return result;
 	}
-	
+
+	public RentDto getRent(int numseq) {
+		RentDto rdto = null;
+		con = Dbman.getConnection();
+		String sql = "select * from rentDetail where numseq = ?";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, numseq);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()){
+				rdto = new RentDto();
+				rdto.setNumseq(rs.getInt("numseq"));
+				rdto.setRentdate(rs.getString("rd"));
+				rdto.setBnum(rs.getInt("bnum"));
+				rdto.setSubject(rs.getString("subject"));
+				rdto.setMnum(rs.getInt("mnum"));
+				rdto.setName(rs.getString("name"));
+				rdto.setRentprice(rs.getInt("rentprice"));
+				rdto.setDiscount(rs.getInt("discount"));
+				rdto.setAmount(rs.getInt("amount"));
+			}
+			
+		} catch (SQLException e) { e.printStackTrace();
+		} finally{
+			Dbman.close(con, pstmt, rs); }
+		return rdto;
+	}
+
+	public int updateRent(RentDto rdto) {
+		int result =0;
+		con =Dbman.getConnection();
+																	//문자를 날짜로 바꿔서 UPDATE 하는 방법
+		String sql = "update rentlist set rentdate = str_to_date( concat('', ?, '') , '%Y-%m-%d' ) , "
+				+ " bnum =? , mnum = ? , discount=? where numseq = ?";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, rdto.getRentdate());
+			pstmt.setInt(2,rdto.getBnum());
+			pstmt.setInt(3, rdto.getMnum());
+			pstmt.setInt(4, rdto.getDiscount());
+			pstmt.setInt(5, rdto.getNumseq());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		Dbman.close(con, pstmt, rs);
+		
+		return result;
+	}
+
+	public int deleteRent(RentDto rdto) {
+		int result = 0;
+		con = Dbman.getConnection();
+		
+		String sql = "delete from rentlist where numseq = ?";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1,rdto.getNumseq());
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			Dbman.close(con, pstmt, rs);			
+		}
+		
+		return result;
+	}
+
 	
 }
